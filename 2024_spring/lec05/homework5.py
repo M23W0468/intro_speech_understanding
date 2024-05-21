@@ -1,56 +1,48 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def center_of_gravity(x):
+def minimum_Fs(f):
     '''
-     Find the center of gravity of a vector, x.
-    If x=[x0,x1,...,xn], then you should return
-    c = ( 0*x0 + 1*x1 + 2*x2 + ... + n*xn ) / sum(x)
-    where n = len(x)-1.
-    
-    Recommended method: use np.arange, np.dot, and np.sum.
+    Find the lowest sampling frequency that would avoid aliasing for a pure tone at f Hz.
     
     @param:
-    x (array): a 1d numpy array
+    f (scalar): frequency in Hz (cycles/second)
     
     @result:
-    c (scalar): x's center of gravity
+    Fs (scalar): the lowest sampling frequency (samples/second) that would
+    not cause aliasing at a tone of f Hz.
     '''
-    c = np.dot(np.arange(len(x)),x) / np.sum(x)
-    return c
+    Fs = 2 * f  # change this line
+    return Fs
 
-def matched_identity(x):
+def omega(f, Fs):
     '''
-    Create an identity matrix that has the same number of rows as x has elements.
-    Hint: use len(x), and use np.eye.
+    Find the radial frequency (omega) that matches a given f and Fs.
     
     @param:
-    x (array): a 1d numpy array, of length N
+    f (scalar): frequency in Hz (cycles/second)
+    Fs (scalar): sampling frequency in samples/second
     
     @result:
-    I (array): a 2d numpy array: an NxN identity matrix
+    omega (scalar): radial frequency in radians/sample
     '''
-    I =  np.eye(len(x))
-    return I
+    omega = 2 * np.pi * f / Fs  # change this line
+    return omega
 
-def  sine_and_cosine(t_start, t_end, t_steps):
+def pure_tone(omega, N):
     '''
-    Create a time axis, and compute its cosine and sine.
-    Hint: use np.linspace, np.cos, and np.sin
+    Create a pure tone of N samples at omega radians/sample.
     
     @param:
-    t_start (scalar): the starting time
-    t_end (scalar): the ending time
-    t_steps (scalar): length of t, x, and y
+    omega (scalar): radial frequency, samples/second
+    N (scalar): duration of the tone, in samples
     
     @result:
-    t (array of length t_steps): time axis, t_start through t_end inclusive
-    x (array of length t_steps): cos(t)
-    y (array of length t_steps): sin(t)
+    x (array): N samples from the signal cos(omega*n)
     '''
-    # change these lines
-    t = np.linspace(t_start,t_end,t_steps) 
-    x = np.cos(t)
-    y = np.sin(t)
-    # end changes here
-    return t, x, y
+    n = np.arange(N)
+    x = np.cos(omega * n) # change this line
+    return x
+
+
+
+
